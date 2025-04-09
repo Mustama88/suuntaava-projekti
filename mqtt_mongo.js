@@ -1,9 +1,12 @@
 
 //MQTT-välityspalvelimen määrittely
-const mqtt    = require('mqtt');
+const mqtt = require('mqtt');
+const express = require('express'); // Add this line
+const app = express(); // Add this line
 const broker = 'mqtt://test.mosquitto.org';
 const user = '';
 const pw = ''; 
+const PORT = process.env.PORT || 3000; 
 
 //määritellään välityspalvelimen "olio"
 mq = mqtt.connect(broker, {
@@ -21,7 +24,7 @@ mq.on('connect', function(){
 
 //Määritellään tietokanta-API
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://eki:eki@cluster0.91fze.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://mustafamahmood:mustama@cluster0.wvfzf.mongodb.net/sensordata?retryWrites=true&w=majority&useUnifiedTopology=true";
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -47,6 +50,13 @@ mq.on('message', function(topic, message) {
 });
 
 
+app.get('/', (req, res) => {
+  res.send('MQTT to MongoDB service is running');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 
 
